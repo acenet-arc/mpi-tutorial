@@ -2,7 +2,7 @@
        implicit none
    
 !
-! simulation parameters
+! Simulation parameters
 !
        integer, parameter :: totpoints=1000
        real, parameter    :: xleft=-12., xright=+12.
@@ -11,8 +11,8 @@
        integer, parameter :: plotsteps=50
 
 !
-! the calculated temperature, and the known correct
-! solution from theory
+! The calculated temperature, 
+! and the known correct solution from theory
 !
        real, allocatable :: x(:)
        real, allocatable, target :: temperature(:,:)
@@ -28,26 +28,26 @@
        real :: error
 
 !
-!  parameters of the original temperature distribution
+! Parameters of the original temperature distribution
 !
        real, parameter :: ao=1., sigmao = 1.
        real :: a, sigma
 
 !
-! set parameters
+! Cell size and timestep size
 !
        dx = (xright-xleft)/(totpoints-1)
        dt = dx**2 * kappa/10.
 
 ! 
-! allocate data, including ghost cells: old and new timestep
-! theory doesn't need ghost cells, but we include it for simplicity
+! Allocate data, including ghost cells, for old and new timesteps.
+! Theory doesn't need ghost cells, but we include them for simplicity.
 !
        allocate(temperature(totpoints+2,2))
        allocate(theory(totpoints+2))
        allocate(x(totpoints+2))
 !
-!  setup initial conditions
+! Set up initial conditions
 !
        old => temperature(:,1)
        new => temperature(:,2)
@@ -58,7 +58,9 @@
 
        fixedlefttemp = ao*exp(-(xleft-dx)**2 / (2.*sigmao**2))
        fixedrighttemp= ao*exp(-(xright+dx)**2 / (2.*sigmao**2))
-
+!
+! Set up plotting with PGPLOT
+!
        call pgbeg(0, "/xwindow", 1, 1)
        call pgask(0)
        call pgenv(xleft, xright, 0., 1.5*ao, 0, 0)
@@ -70,25 +72,23 @@
        white = 4
        call pgscr(white,1.,1.,1.)
  
- 
        call pgsls(1)
        call pgsci(white)
        call pgline(totpoints, x(2), theory(2))
        call pgsls(2)
        call pgsci(red)
        call pgline(totpoints, x(2), old(2))
-
 !
-!  evolve
+! Evolve
 !
        do step=1, nsteps
 !
-! boundary conditions: keep endpoint temperatures fixed.
+! Boundary conditions: keep endpoint temperatures fixed.
 !
            old(1) = fixedlefttemp
            old(totpoints+2) = fixedrighttemp
 !
-! update solution
+! Update solution
 !
            forall (i=2:totpoints+1)
                new(i) = old(i) + dt*kappa/(dx**2) * &
@@ -105,7 +105,7 @@
                 call pgline(totpoints, x(2), new(2))
             endif
 ! 
-! update correct solution
+! Update theoretical (correct) solution
 !
            sigma = sqrt(2.*kappa*time + sigmao**2)
            a = ao*sigmao/sigma

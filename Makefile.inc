@@ -1,9 +1,10 @@
-ROOTDIR=${HOME}/mpi
+ROOTDIR=${HOME}/mpi-tutorial
 
 USEPGPLOT = -DPGPLOT
-PGPLIBS   = -L/usr/X11R6/lib64 -L${PGPLOT_DIR}   -lcpgplot -lpgplot -lX11  -lpng
+PGPLIBS   = -L/usr/X11R6/lib64 -L${EBROOTPGPLOT}   -lcpgplot -lpgplot -lX11  -lpng
+#PGPLIBS   =  -lcpgplot -lpgplot -lX11  -lpng
 
-INCLUDES=-I${PGPLOT_DIR}
+INCLUDES=-I${EBROOTPGPLOT}
 
 CC=gcc
 F77=gfortran

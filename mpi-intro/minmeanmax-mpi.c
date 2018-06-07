@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
      */
 
     dat = (float *)malloc(nx * sizeof(float));
-    srand(0);
+    srand(rank);
     for (i=0;i<nx;i++) {
         dat[i] = 2*((float)rand()/RAND_MAX)-1.;
     }
@@ -52,6 +52,9 @@ int main(int argc, char **argv) {
 
     if (rank != masterproc) {
        ierr = MPI_Ssend( /* ... ? ... */ );
+       printf("Proc %d min/mean/max = %f,%f,%f\n",
+	      rank, minmeanmax[0],minmeanmax[1],minmeanmax[2]);
+
     } else {
         globminmeanmax[0] = datamin;
         globminmeanmax[2] = datamax;

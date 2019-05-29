@@ -1,18 +1,13 @@
 all: diffusionf diffusionc
 
-USEPGPLOT=-DPGPLOT
-
 include ../Makefile.inc
-
-MPICC=mpicc
-MPIF77=mpif90
 
 diffusionf: diffusion.f90
 	${F77} ${FFLAGS} -o $@ $< ${USEPGPLOT} ${PGPLIBS}
 
 diffusionc: diffusion.c
-	${CC} ${CFLAGS} -g -c -o diffusionc.o $< ${USEPGPLOT} ${PGPLIBS}
-	${F77} ${FFLAGS} -g -o $@ diffusionc.o ${USEPGPLOT} ${PGPLIBS}
+	${CC} ${CFLAGS} -c -o diffusionc.o $< ${USEPGPLOT} ${PGPLIBS}
+	${F77} ${FFLAGS} -o $@ diffusionc.o ${USEPGPLOT} ${PGPLIBS}
 
 diffusionf-mpi: diffusionf-mpi.f90
 	${MPIF77} ${FFLAGS} -o $@ $< ${PGPLIBS}

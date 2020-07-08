@@ -1,12 +1,12 @@
 USEPGPLOT = -DPGPLOT
 PGPLIBS   =  -lpgplot -lcpgplot
 
-CC=icc
-F77=ifort
+CC=gcc
+F77=gfortran
 MPICC=mpicc
 MPIF77=mpif90
 
 CFLAGS=-std=c99 -O2 ${USEPGPLOT}
-FFLAGS=-nofor_main -O2 -g
+FFLAGS=-O2 -g
 
 
